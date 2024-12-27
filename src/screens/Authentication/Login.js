@@ -3,9 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } 
 import { signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from '../../../firebase/firebase.config';
 import LinearGradient from 'react-native-linear-gradient';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -15,15 +17,36 @@ const LoginScreen = ({ navigation }) => {
     }, []);
 
     const handleLogin = () => {
+        if (!email || !password) {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Warning',
+                textBody: 'Please enter both email and password.',
+                button: 'Close',
+            });
+            return;
+        }
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                alert("User login Successfull!");
+                Dialog.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'Success',
+                    textBody: 'User created successfully!',
+                    button: 'Close',
+                });
                 navigation.replace("Main");
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert(errorMessage);
+                // const errorCode = error.code;
+                // const errorMessage = error.message;
+                // alert(errorMessage);
+                Dialog.show({
+                    type: ALERT_TYPE.DANGER,
+                    title: 'Error',
+                    // textBody: error.message,
+                    textBody: "User not found!",
+                    button: 'Close',
+                });
             });
     };
 
@@ -31,7 +54,12 @@ const LoginScreen = ({ navigation }) => {
         if (email != null) {
             sendPasswordResetEmail(auth, email)
                 .then(() => {
-                    alert("Password reset email has been send successfull!")
+                    Dialog.show({
+                        type: ALERT_TYPE.SUCCESS,
+                        title: 'Success',
+                        textBody: 'Reset link send successfully!',
+                        button: 'Close',
+                    });
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -40,7 +68,14 @@ const LoginScreen = ({ navigation }) => {
 
                 });
         } else {
-            alert("Please enter valid email!");
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Warning',
+                textBody: 'Please enter email!',
+                button: 'Close',
+            });
+            return;
+
         }
     };
 
@@ -89,10 +124,6 @@ const LoginScreen = ({ navigation }) => {
                     <TouchableOpacity
                         style={styles.linkContainer}
                         onPress={() => resetPassword()}
-                    // style={{
-                    //     margin: 10,
-                    //     alignItems: 'center'
-                    // }}
                     >
                         <Text style={styles.linkText}>Forget Password?</Text>
                     </TouchableOpacity>
@@ -125,7 +156,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowOffset: { width: 0, height: 5 },
         shadowRadius: 10,
-        elevation: 10,
+        // elevation: 10,
     },
     appName: {
         fontSize: 36,

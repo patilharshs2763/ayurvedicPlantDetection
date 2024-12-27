@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Animated, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Animated, Image, Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -51,14 +51,25 @@ const plantData = [
 
 ];
 
-const DetectionScreen = () => {
+const DetectionScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.topContainer}>
-                <View style={styles.DetectNew}>
-                    <Ionicons name="search-sharp" size={30} color={'coral'} />
+                {/* <View style={styles.DetectNew} >
+                    <Ionicons name="search-sharp" size={30} color={'coral'}  />
                     <Text style={styles.detectNewText}>Detect New Plant</Text>
-                </View>
+                </View> */}
+                <Pressable style={styles.DetectNew}
+                    onPress={() => navigation.push('Camera')}
+                >
+                    <Ionicons
+                        name="scan-sharp"
+                        size={50}
+                        color={'coral'}
+
+                    />
+                    <Text style={styles.detectNewText}>Detect New Plant</Text>
+                </Pressable>
                 <View style={styles.DetectGuid}>
                     {/* <Icon name="camera" size={30} color="#fff" /> */}
                     <Ionicons name="help-circle-sharp" size={30} color={'coral'} />

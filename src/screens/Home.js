@@ -4,21 +4,13 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 const HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            {/* Custom Header */}
 
-
-            {/* Introduction Text */}
             <View style={styles.introContainer}>
                 <Text style={styles.introText}>
                     Discover the healing power of nature through Ayurveda. Explore medicinal plants and their uses in treating various ailments.
-
-
                 </Text>
             </View>
 
-
-
-            {/* Sample Image for Plant Detection Demo */}
             <View style={styles.sampleContainer}>
                 <Text style={styles.sampleText}>Medicinal benefits of plants</Text>
                 <Image

@@ -1,19 +1,28 @@
+// Logout.js
 import React, { useEffect } from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../../firebase/firebase.config';
 import { useNavigation } from '@react-navigation/native';
 
-const LogoutScreen = () => {
+const Logout = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        // Clear authentication or other data
-        // For example:
-        // auth.signOut(); (if using Firebase)
-
-        // Navigate to Login screen after logout
-        navigation.navigate('Login');
+        signOut(auth)
+            .then(() => {
+                navigation.replace('Login');  // Navigate to the Login screen after logout
+            })
+            .catch((error) => {
+                console.error("Logout failed:", error);
+            });
     }, []);
 
-    return null; // Can render a loading screen or just null as it's an intermediate action
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#6200EE" />
+        </View>
+    );
 };
 
-export default LogoutScreen;
+export default Logout;

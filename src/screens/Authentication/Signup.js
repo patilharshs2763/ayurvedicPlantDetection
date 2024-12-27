@@ -1,26 +1,50 @@
-
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../../firebase/firebase.config';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
-// import { LinearGradient } from 'expo-linear-gradient'; // Ensure you have installed expo-linear-gradient
 import LinearGradient from 'react-native-linear-gradient';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 const SignupScreen = ({ navigation }) => {
-    const [name, setName] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleSignup = () => {
+        // Simple validation for email and password
+        if (!email || !password) {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Warning',
+                textBody: 'Please fill all fields.',
+                button: 'Close',
+            });
+            return;
+        }
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                alert("User created succefully!");
-                navigation.replace("Main");
+                // Show success dialog
+                Dialog.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'Success',
+                    textBody: 'User created successfully!',
+                    button: 'Close',
+                });
+
+                // Navigate after a short delay
+                setTimeout(() => {
+                    navigation.replace("Main");
+                }, 1000);
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                alert(errorMessage);
+                // Show error dialog
+                Dialog.show({
+                    type: ALERT_TYPE.DANGER,
+                    title: 'Error',
+                    textBody: error.message,
+                    button: 'Close',
+                });
             });
     };
 
@@ -60,7 +84,7 @@ const SignupScreen = ({ navigation }) => {
                         placeholderTextColor="#aaa"
                     />
 
-                    <TouchableOpacity style={styles.button} onPress={() => handleSignup()} >
+                    <TouchableOpacity style={styles.button} onPress={handleSignup}>
                         <LinearGradient
                             colors={['#8E2DE2', '#4A00E0']}
                             style={styles.buttonBackground}
@@ -91,14 +115,14 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     container: {
-        backgroundColor: '#ffffffbb', // Slightly transparent white
+        backgroundColor: '#ffffffbb',
         borderRadius: 15,
         padding: 30,
         shadowColor: '#000',
         shadowOpacity: 0.25,
         shadowOffset: { width: 0, height: 5 },
         shadowRadius: 10,
-        elevation: 10,
+        // elevation: 10,
     },
     title: {
         fontSize: 28,
