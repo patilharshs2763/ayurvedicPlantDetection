@@ -13,6 +13,7 @@ const CameraScreen = () => {
     const [isActive, setIsActive] = useState(false);
     const [photo, setPhoto] = useState(null);
     const [flash, setFlash] = useState("off");
+    console.log("flash")
 
     const camera = useRef(null);
 
